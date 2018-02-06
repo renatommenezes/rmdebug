@@ -9,6 +9,9 @@
 		protected static $get;
 		protected static $db = array();
 		protected static $session;
+		protected static $custom = array();
+		protected static $destroy = false;
+
 
 
 		public function start()
@@ -16,6 +19,7 @@
 			self::get();
 			self::post();
 			self::session();
+			self::page();
 			self::startExecuteScript();
 		}
 
@@ -44,9 +48,33 @@
 			array_push(self::$db, self::formatQuery(strtoupper($query)));
 		}
 
-		public function page($page)
+		public function page($page="")
 		{
+			if($page == "")
+			{
+				$page = basename($_SERVER['PHP_SELF']);
+			}
+
 			array_push(self::$page, $page);
+		}
+
+		public function custom($mensage, $array = array())
+		{
+			if(is_array($mensage))
+			{
+				array_push(self::$custom, self::formatArray($mensage));
+			}
+			else
+			{
+				if(is_array($array) && sizeof($array) > 0)
+				{
+					array_push(self::$custom, $mensage . ": " . self::formatArray($array));
+				}
+				else
+				{
+					array_push(self::$custom, $mensage);	
+				}	
+			}
 		}
 
 		public function startExecuteScript()
@@ -57,6 +85,22 @@
 		public function endExecuteScript()
 		{
 			self::$endTime = microtime(true);
+		}
+
+		public function destroy()
+		{
+			self::$destroy = true;
+		}
+
+		private function formatArray($array)
+		{
+			$string = "";
+			foreach($array as $key=>$value)
+			{
+				$string .= "[". $key ."] => ". $value .", "; 
+			}
+
+			return substr($string, 0, -2);
 		}
 
 		private function runTime()
@@ -79,29 +123,34 @@
 
 		private function handle($data)
 		{
+
+			if(self::$destroy)
+			{
+				return false;
+			}
 			
 			$content = "";
 			foreach($data as $key=>$values)
 			{
 				if(sizeof($values) > 0)
 				{
-					$content .= '<fieldset style="margin-bottom: 10px; border: 1px solid #c7c7c7"><legend style="font-weight: bold;">'. $key .'</legend>';
+					$content .= '<fieldset style="margin-bottom: 10px; border: 1px solid #c7c7c7"><legend style="font-weight: bold;">'. $key .'</legend><pre>';
 
 					foreach($values as $key=>$value)
 					{
 						if(is_int($key))
 						{
-							$content .= nl2br($value);// .'<br>';
+							$content .= $value .'<br>';
 						}
 						else
 						{
-							$content .= $key .' = '. $value .'<br>';
+							$content .= $key .' = '. $value . PHP_EOL;
 						}
 						
 					}
 				}
 				
-				$content .= '</fieldset>';
+				$content .= '</pre></fieldset>';
 			}
 
 			return '
@@ -161,6 +210,7 @@
 			$data["POST"] = self::$post;
 			$data["SESSION"] = self::$session;
 			$data["PAGES"] = self::$page;
+			$data["CUSTOM"] = self::$custom;
 			$data["DATA BASE"] = self::$db;
 			
 			print self::handle($data);

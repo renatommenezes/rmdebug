@@ -6,6 +6,13 @@
 	$_SESSION["NOME"] = "Lucas Saulo Daniel";
 	Debug::start();
 
+	Debug::custom("teste");
+	Debug::custom("teste2");
+	Debug::custom("teste3");
+	Debug::custom("Teste", array("usuario" => "Geovane", "parceiro" => "Gean"));
+	Debug::custom("Teste 2", array("id" => 1, "name" => "Gean", "musica" => "Dois corações e uma história"));
+	Debug::custom(array("usuario" => "Geovane", "parceiro" => "Gean"));
+
 	Debug::db("SELECT * FROM usuariofrom U inner  join tipo T ON T.id = U.id");
 	Debug::db("SELECT tipo as tipo, (select * from teste) as teste FROM tipo_usuario");
 	Debug::db("
