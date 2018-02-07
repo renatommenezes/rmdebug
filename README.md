@@ -63,7 +63,7 @@ Lorem ipsum: [id] => 1, [name] => Saulo
 [id] => 2, [name] => Jonatan
 ```
 
-### Method logInfo(string|array $mensage, $data = [])
+### Method logInfo(string $mensage)
 
 Used to show script execution message.
 ```php
