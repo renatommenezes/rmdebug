@@ -13,6 +13,8 @@
 	Debug::custom("Teste 2", array("id" => 1, "name" => "Gean", "musica" => "Dois corações e uma história"));
 	Debug::custom(array("usuario" => "Geovane", "parceiro" => "Gean"));
 
+	Debug::logInfo("Dois corações e uma história");
+
 	Debug::db("SELECT * FROM usuariofrom U inner  join tipo T ON T.id = U.id");
 	Debug::db("SELECT tipo as tipo, (select * from teste) as teste FROM tipo_usuario");
 	Debug::db("
@@ -29,6 +31,12 @@
 				tipo IN (SELECT id FROM TIPO WHERE id = 3) OR
 				id NOT EXISTS 					
 	");
+
+	Debug::logInfo("Executando a query de usuário");
+
+	echo $a;
+	echo $b;
+	echo password_hash('asdfasdf', PASSWORD_BCRYPT, ['salt' => '12345678901234567890123']);
 ?>
 <html>
 	<head>

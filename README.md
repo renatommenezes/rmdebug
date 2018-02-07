@@ -24,6 +24,7 @@ For show Debug press key "CTRL" twice on your keyboard  that will open a modal w
 - GET
 - POST
 - PAGES
+- LOG
 
 ## Document
 
@@ -60,4 +61,13 @@ Result
 Lorem ipsum
 Lorem ipsum: [id] => 1, [name] => Saulo
 [id] => 2, [name] => Jonatan
+```
+
+### Method logInfo(string|array $mensage, $data = [])
+
+Used to show script execution message.
+```php
+<?php
+	Debug::logInfo("Saving user data Saulo.");
+?>
 ```
